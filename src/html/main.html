@@ -1,0 +1,58 @@
+<section class="main">
+    <h1 class="main__title">Проведение ТО и мелкий ремонт</h1>
+    <nav class="main__nav">
+        <ul class="main__nav-list">
+            <li class="main__nav-item">
+                <a href="" class="main__nav-link">Общее</a>
+            </li>
+            <li class="main__nav-item">
+                <a href="" class="main__nav-link main__active-link">Товар списания</a>
+            </li>
+            <li class="main__nav-item">
+                <a href="" class="main__nav-link">Доп.расходы</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="main__add wrapper">
+        <button class="add__btn">Добавить строку</button>
+    </div>
+
+    <div class="table__wrapper wrapper">
+        <table class="table" id="table">
+            <thead>
+                <tr>
+                    <th class="js-resizable thead">Номер строки</th>
+                    <th class="js-resizable thead">Действия</th>
+                    <th class="js-resizable thead">Наименование единицы</th>
+                    <th class="js-resizable thead">Цена</th>
+                    <th class="js-resizable thead">Кол-во</th>
+                    <th class="js-resizable thead">Название товара</th>
+                    <th class="thead">Итого</th>
+                </tr>
+            </thead>
+            <tbody id="table__body">
+
+            </tbody>
+        </table>
+        <div class="table__total">
+            <div class="total__detail">
+                <div class="total__local">
+                    <p class="total__title">Сумма:</p>
+                    <p class="total__num"  id="total__sum"></p>
+                </div>
+                <div class="total__local">
+                    <p class="total__title">Кол-во:</p>
+                    <p class="total__num" id="total__quantity"></p>
+                </div>
+                <div class="total__local">
+                    <p class="total__title">Oбщий вес:</p>
+                    <p class="total__num" id="total__weight"></p>
+                </div>
+            </div>
+            <div class="total__glob">
+                <p class="total__title-glob">Общая сумма:</p>
+                <p class="total__num-glob"  id="total__glob"></p>
+            </div>
+        </div>
+    </div>
+</section>

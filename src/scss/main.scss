@@ -1,0 +1,155 @@
+.body__wrapper {
+    display: flex;
+    height: 100%;
+}
+main {
+    width: 100%;
+}
+.main {
+    width: 100%;
+    height: 100%;
+    background-color: $PaleGrey;
+    padding: 25px 25px 0 25px;
+    
+    .main__title {
+        margin-bottom: 25px;
+        color: $Black;
+        font-size: 30px;
+    }
+    .main__nav {
+        margin-bottom: 25px;
+        .main__nav-list {
+            display: flex;
+            .main__nav-item {
+                &:not(:last-of-type) {
+                    margin-right: 20px;
+                }
+                .main__nav-link {
+                    font-size: 16px;
+                    color: $LightNavy;
+                    &.main__active-link {
+                        color: $Black;
+                    }
+                }
+            }
+        }
+    }
+}
+.wrapper {
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.07);
+    border-radius: 10px;
+    border: solid 1px $PaleGreyTwo;
+}
+.main__add {
+    padding: 20px 25px;
+    width: 100%;
+    margin-bottom: 25px;
+    .add__btn {
+        padding: 10px 15px;
+        color: $White;
+        background-color: $DodgerBlue;
+        font-size: 14px;
+        &::before {
+            content: url(../img/svg/add.svg);
+            margin-right: 7px;
+        }
+    }
+}
+.table {
+    width: 100%;
+    padding-bottom: 195px;
+
+    border-spacing: 0px;
+}
+.thead {
+    position: relative;
+    text-align: start;
+}
+
+.tr__id-wrapper {
+    display: flex;
+    .tr__btn-drag {
+        min-width: 11px;
+        height: 12px;
+        margin-right: 5px;
+        position: relative;
+        opacity: 0;
+        transition: opacity .2s ease;
+        &::before {
+            content: url(../img/svg/btnDrag.svg);
+        }
+        &:hover {
+            opacity: 1;
+            cursor: grab;
+        }
+    }
+}
+.tr__btn-action {
+
+    &::before {
+        content: url(../img/svg/tripleDots.svg);
+    }
+}
+
+.cell__wrapper {
+    padding: 10px 0 10px 15px;
+    border-radius: 5px;
+    border: solid 1px $PinkishGrey;
+    background-color: $White;
+}
+.table__wrapper {
+    position: relative;
+}
+.table__total {
+    position: absolute;
+    right: 15px;
+    bottom: 25px;
+    width: 304px;
+    font-size: 14px;
+    font-weight: normal;
+    .total__detail {
+        padding: 15px;
+        border-radius: 5px;
+        border: solid 1px $PaleGreyTwo;
+        background-color: #fbfcfd;
+        margin-bottom: 5px;
+        
+        .total__local {
+            display: flex;
+            justify-content: space-between;
+            &:not(:last-of-type) {
+                margin-bottom: 15px;
+            }
+            .total__title {
+            color: $WarmGrey;
+            
+            }
+            .total__num {
+                
+            }
+        }
+    }
+    
+  
+    .total__glob {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        border-radius: 5px;
+        border: solid 1px $PaleGreyTwo;
+        background-color: #fbfcfd;
+        color: $Black;
+        .total__title-glob {
+            
+        }
+        .total__num-glob {
+            font-weight: 600;  
+        } 
+    }
+   
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; // Yeah, yeah everybody write about it
+}

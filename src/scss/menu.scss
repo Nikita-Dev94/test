@@ -1,0 +1,158 @@
+.menu {
+    min-height: 100%;
+    height: 100%;
+    width: 229px;
+    background-image: radial-gradient(circle at 29% 0, $Black, $MenuDark 103%);
+    position: relative;
+}
+.menu__logo {
+    display: flex;
+    justify-content: center;
+    padding: 31px 0;
+}
+.menu__nav {
+    padding-bottom: 115px;
+    .nav__list {
+
+        .nav__item {
+            position: relative;
+            display: flex;
+            padding: 7px 15px 7px 9px;
+            color: $White;
+            transition: background-color .2s ease ;
+            &.active--link {
+                background: linear-gradient($ActiveTab, $ActiveTab) no-repeat, transparent;
+                background-size: 2px, 100%;
+                .nav__item-link {
+                    color: $ActiveTab;
+                }
+            }
+            &.active {
+                background: linear-gradient($ActiveTab, $ActiveTab) no-repeat, $SubMenuBack;
+                background-size: 2px, 100%;
+                .nav__item-link {
+                    color: $White;
+                }
+                
+            }
+
+            .nav__btn-drag {
+                min-width: 11px;
+                height: 12px;
+                margin-right: 5px;
+                position: relative;
+                opacity: 0;
+                transition: opacity .2s ease;
+                &:hover {
+                    opacity: 1;
+                    cursor: grab;
+                }
+
+                &::before {
+                    content: url(../img/svg/btnDrag.svg);
+                }
+            }
+
+            .nav__btn-drop {
+                position: absolute;
+                right: 15px;
+                transition: transform .2s ease;
+                &.active {
+                    transform: rotateX(180deg);
+                }
+            }
+        }   
+    }
+    .subnav__list {
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        transition: opacity .2s ease, visibility .2s ease, max-height .2s ease, background-color .2s ease ;
+        &.active {
+            opacity: 1;
+            visibility: visible;
+            max-height: 100%;
+            background-color: $SubMenuBack;
+        }
+        .subnav__item {
+            padding: 7px 0 7px 25px;
+            color: $SubMenuText;
+                .subnav__item-link {
+                
+            } 
+        }
+    }
+    
+}
+.menu__footer {
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    max-width: calc(100% - 30px);
+    width: 100%;
+    .account__info {
+        position: relative;
+        display: flex;
+        align-items: center;
+        border-top: 1px solid $DarkGreyBlue;
+        padding: 9.5px 0 10px;
+        z-index: 2;
+        .account__btn {
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .account__avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $WhiteTwo;
+            color: $MenuDark;
+            margin-right: 7px;
+        }
+        .account__name {
+            color: $White;
+        }
+    }
+    .footer__drop {
+        position: absolute;
+        top: -100%;
+        width: 100%;
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        transition: opacity .2s ease, visibility .2s ease, max-height .2s ease, transform .2s ease;
+        &.drop-top {
+            opacity: 1;
+            visibility: visible;
+            max-height: 100%;
+            transform: translateY(-10.5px);
+        }
+        .footer__list {
+            background-color: $White;
+            padding: 0 9.5px;
+            width: 100%;
+            border-radius: 5px;
+            .footer__item {
+                padding: 7px 0;
+                .footer__link {
+
+                }
+            }
+        }
+    }
+
+
+
+}
+
+
+
