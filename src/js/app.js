@@ -341,26 +341,11 @@ const changeInputs = ()=> {
 		$inputPrice.addEventListener('input', (e)=> {
 				
 				$inputTotal.value = $inputQuan.value * $inputPrice.value
-				const localBaseCopy = [...localBase]
-				localBaseCopy.forEach(item => {
-					if (+e.currentTarget.parentNode.parentNode.getAttribute('id') === +item.id) {
-						item.price = +$inputPrice.value
-						localStorage.setItem('dataBase', JSON.stringify(localBaseCopy));
-					}
-				})
-				
 				totalCalc()
 				saveOrders()
 			})
 		$inputQuan.addEventListener('input', (e)=> {
 				$inputTotal.value = $inputQuan.value * $inputPrice.value
-				const localBaseCopy = [...localBase]
-				localBaseCopy.forEach(item => {
-					if (+e.currentTarget.parentNode.parentNode.getAttribute('id') === +item.id) {
-						item.quantity = +$inputQuan.value
-						localStorage.setItem('dataBase', JSON.stringify(localBaseCopy));
-					}
-				})
 				totalCalc()
 				saveOrders()
 			})
@@ -373,13 +358,6 @@ const changeInputs = ()=> {
 			const test = $inputTotal.value / $inputQuan.value
 			// про копейки тоже не забываем
 			$inputPrice.value = test.toFixed(2)
-			const localBaseCopy = [...localBase]
-			localBaseCopy.forEach(item => {
-				if (+e.currentTarget.parentNode.parentNode.getAttribute('id') === +item.id) {
-					item.price = +$inputPrice.value
-					localStorage.setItem('dataBase', JSON.stringify(localBaseCopy));
-				}
-			})
 			totalCalc()
 		})
 		})
