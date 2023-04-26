@@ -70,6 +70,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+			z-index: 10;
 			background: 
 			linear-gradient(90deg, $LightGreyBlue 50%, transparent 0) repeat-x,
 			linear-gradient(90deg, $LightGreyBlue 50%, transparent 0) repeat-x,
@@ -90,3 +91,57 @@
         background-position: 15px 0, -15px 100%, 0 -15px, 100% 15px;
     }
 } 
+
+
+
+
+.table {
+	border-collapse: collapse;
+}
+
+.draggable {
+	cursor: move;
+	user-select: none;
+}
+.placeholder {
+	position: relative;
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 10;
+		background: 
+		linear-gradient(90deg, $LightGreyBlue 50%, transparent 0) repeat-x,
+		linear-gradient(90deg, $LightGreyBlue 50%, transparent 0) repeat-x,
+		linear-gradient(0deg, $LightGreyBlue 50%, transparent 0) repeat-y,
+		linear-gradient(0deg, $LightGreyBlue 50%, transparent 0) repeat-y,
+		$White;
+		background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
+		background-position: 0 0, 0 100%, 0 0, 100% 0;
+		animation: linearGradientMove .5s infinite linear ;
+	}
+}
+.clone-list {
+
+	display: flex;
+}
+.clone-table {
+	border-collapse: collapse;
+	border: none;
+}
+tr {
+	min-height: 45px;
+}
+.clone-table tr td {
+height: 38.5px;
+padding: 5px 10px;
+}
+.dragging {
+	background: #fff;
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	z-index: 999;
+}

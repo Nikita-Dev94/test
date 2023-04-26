@@ -4,28 +4,42 @@
 }
 main {
     width: 100%;
-}
-.main {
-    width: 100%;
     height: 100%;
     background-color: $PaleGrey;
     padding: 25px 25px 0 25px;
-    
+    overflow: auto;
+    font-family: 'MyriadPro', sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+
     .main__title {
-        margin-bottom: 25px;
+        margin-bottom: 22px;
         color: $Black;
         font-size: 30px;
+        letter-spacing: 1px;
     }
-    .main__nav {
-        margin-bottom: 25px;
+    .main__nav {    
+        margin-bottom: 22px;
+        position: relative;
+
         .main__nav-list {
             display: flex;
+
             .main__nav-item {
+                
+                &.main__nav-item--nonactive {
+                    display: none;
+                }
                 &:not(:last-of-type) {
-                    margin-right: 20px;
+                    margin-right: 15px;
                 }
                 .main__nav-link {
                     font-size: 16px;
+                    font-weight: 600;
                     color: $LightNavy;
                     &.main__active-link {
                         color: $Black;
@@ -45,10 +59,11 @@ main {
     width: 100%;
     margin-bottom: 25px;
     .add__btn {
-        padding: 10px 15px;
+        padding: 9px 13px;
         color: $White;
         background-color: $DodgerBlue;
         font-size: 14px;
+        border-radius: 5px;
         &::before {
             content: url(../img/svg/add.svg);
             margin-right: 7px;
@@ -58,12 +73,16 @@ main {
 .table {
     width: 100%;
     padding-bottom: 195px;
-
     border-spacing: 0px;
+    tbody td {
+        padding: 5px 10px;
+    }
 }
 .thead {
     position: relative;
     text-align: start;
+    padding: 14px 10px;
+    border: 1px solid $PaleGreyTwo;
 }
 
 .tr__id-wrapper {
@@ -99,6 +118,7 @@ main {
 }
 .table__wrapper {
     position: relative;
+    padding-bottom: 195px;
 }
 .table__total {
     position: absolute;
@@ -148,6 +168,122 @@ main {
     }
    
 }
+
+.label__name {
+    position: relative;
+
+    .products__list {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        visibility: hidden;
+        opacity: 0;
+        z-index: 5;
+        transition: visibility .2s ease, opacity .2s ease .2s;
+        &.cell__wrapper {
+            padding: 0;
+            li {
+                padding: 7px 10px;
+            }
+        }
+
+        &.products__list--active {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+
+
+.btn__setting {
+    position: absolute;
+    right: 0;
+    top: calc(50% - 7.5px);
+    transition: transform .2s ease;
+    #filling {
+        transition: fill .2s ease;
+    }
+    &.btn__setting--active {
+        transform: rotate(-45deg);
+        transform-origin: 8px 8px;
+        #filling {
+            fill: #2f8cff;
+        }
+    }
+    &:hover {
+        transform: rotate(-45deg);
+        transform-origin: 8px 8px;
+        #filling {
+            fill: #2f8cff;
+        }
+    }
+}
+
+.setting__list {
+    position: absolute;
+    top: 100%;
+    right: 15px;
+    visibility: hidden;
+    opacity: 0;
+    &.cell__wrapper {
+        padding-right: 15px;
+    }
+    &.setting__list--active {
+        visibility: visible;
+        opacity: 1;
+    }
+    .setting__item {
+    cursor: pointer;
+    }
+}
+
+input {
+    width: 100%;
+}
+
+.hide {
+    display: none;
+}
+
+.action__wrapper{
+    position: relative;
+    .delete {
+        position: absolute;
+        bottom: 0;
+        left: 10px;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility .2s ease, opacity .2s ease .2s;
+        &.cell__wrapper {
+            padding-right: 15px;
+        }
+        &.delete--active {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+.view__list {
+    display: none;
+    &.view__list--active {
+        display: block;
+    }
+}
+.view__el {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    input {
+        width: 20px;
+        height:20px;
+    }
+    label {
+        display: flex;
+        align-items: center;
+    }
+}
+
+
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {

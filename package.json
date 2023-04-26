@@ -47,5 +47,8 @@
     "webp-converter": "2.2.3",
     "webpack": "^5.75.0",
     "webpack-stream": "^7.0.0"
+  },
+  "dependencies": {
+    "@validide/resizable-table-columns": "^2.1.0"
   }
 }

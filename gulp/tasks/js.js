@@ -8,9 +8,6 @@ export const js = () => {
 				message: "Error: <%= error.massage %>"
 			})
 		))
-		.pipe(rename({
-			extname: ".min.js"
-		}))
 		.pipe(app.gulp.dest(app.path.build.js))
 		.pipe(app.plugins.browserSync.stream())
 }
