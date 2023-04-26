@@ -115,7 +115,10 @@ document.getElementById('account__btn').addEventListener('click',()=> {
 
 // Добавление новой строки в таблицу
 $addBtn.addEventListener('click', ()=> {
-	const lastId = $tableBody.lastElementChild.id	
+	let lastId = 0;
+	if ($tableBody.lastElementChild) {
+		lastId = $tableBody.lastElementChild.id
+	} 
 	const $newTr = createTr(+lastId+1, +lastId+1)
 	$newTr.setAttribute('id', +lastId+1)
 	$tableBody.append($newTr)
@@ -389,8 +392,9 @@ const thead = document.getElementById('table__head')
 const trHead = document.querySelectorAll('.thead')
 let currentCol = localStorage.getItem('currentCol')
 	currentCol = JSON.parse(currentCol)
-thead.innerHTML = ''
+
 if (currentCol) {
+	thead.innerHTML = ''
 	currentCol.forEach(el=> {
 		for (let i = 0; i < trHead.length; i++) {
 		if (+el === +trHead[i].dataset.tableCol) {
@@ -404,22 +408,25 @@ if (currentCol) {
 	const order = localStorage.getItem('order')
 	let num = 0
 	let id = 0
-	
-	JSON.parse(order).forEach((el)=> {	
+	const countOrder = JSON.parse(order)
+	if (countOrder !== null) {
+		countOrder.forEach((el)=> {	
 
-		const $newTr = createTr(id+1, num+1)
-		$newTr.setAttribute('id', id+1)
-		num++
-		id++
-		$newTr.querySelector('.products__list').classList.remove('products__list--active')
-		$newTr.querySelector('.tr__input-name').value = `${el.name},${el.weight >=1000 ? el.weight / 1000 + ' тн': el.weight + ' кг'}`
-		$newTr.querySelector('.tr__input-name').dataset.weight = el.weight
-		$newTr.querySelector('.tr__input-price').value = el.price
-		$newTr.querySelector('.tr__input-quantity').value = el.quantity
-		$newTr.querySelector('.tr__input-title').value = el.name
-		$newTr.querySelector('.tr__input-total').value = el.price * el.quantity
-		$tableBody.append($newTr)
-	})
+			const $newTr = createTr(id+1, num+1)
+			$newTr.setAttribute('id', id+1)
+			num++
+			id++
+			$newTr.querySelector('.products__list').classList.remove('products__list--active')
+			$newTr.querySelector('.tr__input-name').value = `${el.name},${el.weight >=1000 ? el.weight / 1000 + ' тн': el.weight + ' кг'}`
+			$newTr.querySelector('.tr__input-name').dataset.weight = el.weight
+			$newTr.querySelector('.tr__input-price').value = el.price
+			$newTr.querySelector('.tr__input-quantity').value = el.quantity
+			$newTr.querySelector('.tr__input-title').value = el.name
+			$newTr.querySelector('.tr__input-total').value = el.price * el.quantity
+			$tableBody.append($newTr)
+		})
+	}
+	
 		num= 0
 		id = 0
 	totalCalc()
