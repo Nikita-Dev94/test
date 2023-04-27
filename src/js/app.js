@@ -1,6 +1,7 @@
 
 // Создам ипровизированную БД, при загрузке страницы мы должны получить ответ от сервера с позициями и их свойствами. Здесь и должна быть функция запрос.
 // здесь храняться, как я понимаю, дефолтные значения цены  и т.д. При изменении данных в инпутах мы должны отправлять данные на сервер, что бы хранить эту информацию.
+
 // В нашем случае мы будем их хранить в localStorage 
 const dataBase = [
 	{
@@ -42,16 +43,17 @@ const dataBase = [
 
 
 
-const $navLink = document.querySelectorAll('.nav__item-link')
-const $subnavLists = document.querySelectorAll('.subnav__list')
-const $navList = document.getElementById('navList');
-const $totalSum = document.getElementById('total__sum');
-const $totalQuantity = document.getElementById('total__quantity');
-const $totalWeight = document.getElementById('total__weight');
-const $totalGlobSum = document.getElementById('total__glob');
-const $addBtn  = document.querySelector('.add__btn'),
+const $navLink = document.querySelectorAll('.nav__item-link'),
+$subnavLists = document.querySelectorAll('.subnav__list'),
+$navList = document.getElementById('navList'),
+$totalSum = document.getElementById('total__sum'),
+$totalQuantity = document.getElementById('total__quantity'),
+$totalWeight = document.getElementById('total__weight'),
+$totalGlobSum = document.getElementById('total__glob'),
+$addBtn  = document.querySelector('.add__btn'),
 $table = document.getElementById('table'), 
-$tableBody = $table.querySelector('tbody');
+$tableBody = $table.querySelector('tbody'),
+$saveBtnChange = document.querySelector('.save__change-btn')
 
 // сортируем 
 const sortDragableItems = ()=> {
@@ -138,8 +140,10 @@ $tableBody.addEventListener('click', (e)=> {
 		e.target.nextElementSibling.classList.toggle('delete--active')
 	}
 	if (e.target.classList.contains('delete')) {
+		saveOrders()
 		const orders = JSON.parse(localStorage.getItem('order'))
 		const ordersCopy = [...orders]
+		
 		ordersCopy.forEach(el => {
 			if (+e.target.parentNode.parentNode.parentNode.getAttribute('id') === +el.id) {
 				e.target.parentNode.parentNode.parentNode.remove()
@@ -155,7 +159,6 @@ $tableBody.addEventListener('click', (e)=> {
 			updatePosition(e.target);
 		})
 	}
-
 })
 
 const updatePosition = (elem)=> {
@@ -404,6 +407,11 @@ if (currentCol) {
 			$tableBody.append($newTr)
 		})
 	}
+	const table = document.getElementById('table')
+	if (localStorage.getItem('colSize')) {
+		const colSize = JSON.parse(localStorage.getItem('colSize'))
+		table.style.gridTemplateColumns = colSize
+	}
 	
 		num= 0
 		id = 0
@@ -418,19 +426,34 @@ document.querySelectorAll('.btn__setting').forEach(el=> {
 		ev.currentTarget.nextElementSibling.classList.toggle('setting__list--active')
 	})
 })
-
+// рендер верхних вкладок, селектов и пертаскивалок
 const renderTabs = ()=> {
 	const container = document.querySelector('.main__nav-list')
 	const tabs = container.querySelectorAll('.main__nav-item')
 	const tabsList = document.querySelectorAll('[data-select-tab]');
+	const priorityList = document.querySelectorAll('[data-priority-tab]')
 	const currentNum = localStorage.getItem('tabs')
+
+
 	const test = JSON.parse(currentNum)
-	if (currentNum !== null) {
 		
+	if (currentNum !== null) {
+
+		test.forEach(num => {
+		
+			tabs.forEach(el=> {
+				if (+num === +el.dataset.tab) {
+					
+					container.append(el)
+				}
+			})
+		})
+
+
 		tabs.forEach(el => {
 			test.forEach(num => {
 				if (+el.dataset.tab === +num) {
-					el.classList.add('main__nav-item--nonactive')
+					el.classList.add('main__nav-item--active')
 				} 
 			})
 			
@@ -438,60 +461,238 @@ const renderTabs = ()=> {
 		tabsList.forEach(el=> {
 			test.forEach(num => {
 				if (+el.dataset.selectTab === +num) {
-					el.checked = false
+					el.checked = true
 				} 
 			})
+			priorityList.forEach(elem=> {
+				if (+el.dataset.selectTab === +elem.dataset.priorityTab) {
+					el.checked ? elem.style.display = 'block' : elem.style.display = 'none'
+				}
+			})
 		})
+
 	}
 }
-renderTabs()
-document.querySelector('.setting__list').addEventListener('click', (el)=> {
-	switch (el.target.id) {
-		case 'view':
-			document.querySelector('.view__list').classList.toggle('view__list--active')
+const renderCols = ()=> {
+	const table = document.getElementById('table')
+	const cols = document.querySelectorAll('[data-table-col]')
+	const selectCols = document.querySelectorAll('[data-select-table-tab]');
+	const currentCols = JSON.parse(localStorage.getItem('cols'))
+	let GTC = table.style.gridTemplateColumns
+	selectCols.forEach(inp => {
+		if (currentCols !== null) {
 			
-			const tabsList = document.querySelectorAll('[data-select-tab]');
-				tabsList.forEach(el=> {
-					const currentNum = localStorage.getItem('tabs')
-					const test = JSON.parse(currentNum)
-					if (currentNum !== null) {
-						tabsList.forEach(el=> {
-							test.forEach(num => {
-								if (+el.dataset.selectTab === +num) {
-									el.checked = false
-								} 
-							})
-						})
-					}
-					let checkedEls = []
-					el.addEventListener('change', inp => {
-						document.querySelectorAll('.main__nav-item').forEach(elem=> {
-							if (+inp.target.dataset.selectTab === +elem.dataset.tab) {
-								inp.target.checked ? elem.classList.remove('main__nav-item--nonactive') : elem.classList.add('main__nav-item--nonactive')
-							}
-						})
-						tabsList.forEach(checkedEl => {
-							if (!checkedEl.checked) {
-								checkedEls.push(checkedEl.dataset.selectTab)
-							}
-						})
+		} else {
+			inp.checked = true
+		}
+		inp.addEventListener('change', inpEv => {
+			cols.forEach(col => {
+				if (+inpEv.target.dataset.selectTableTab === +col.dataset.tableCol) {
+					col.style.display = 'none'
 
-						localStorage.setItem('tabs', JSON.stringify(checkedEls)) 
-						checkedEls = []
+				}
+			})
+		})
+	})
+	
+
+}
+
+document.querySelectorAll('.setting__list').forEach(el=> {
+
+	el.addEventListener('click', (el)=> {
+		switch (el.target.id) {
+			case 'view':
+				document.querySelector('.view__list').classList.toggle('view__list--active')
+				
+				const tabsList = document.querySelectorAll('[data-select-tab]');
+					tabsList.forEach(el=> {
+						const currentNum = localStorage.getItem('tabs')
+						const test = JSON.parse(currentNum)
+						if (currentNum !== null) {
+							tabsList.forEach(ele=> {
+								test.forEach(num => {
+									if (+ele.dataset.selectTab === +num) {
+										ele.checked = true
+									} 
+								})
+							})
+						} else {
+							el.checked = true
+						}
+						let checkedEls = []
+						el.addEventListener('change', inp => {
+							document.querySelectorAll('.main__nav-item').forEach(elem=> {
+								if (+inp.target.dataset.selectTab === +elem.dataset.tab) {
+									inp.target.checked ? elem.classList.add('main__nav-item--active') : elem.classList.remove('main__nav-item--active')
+								}
+							})
+							document.querySelectorAll('[data-priority-tab]').forEach(elem=> {
+								if (+inp.target.dataset.selectTab === +elem.dataset.priorityTab) {
+									inp.target.checked ? elem.style.display = 'block' : elem.style.display = 'none'
+								}
+							})
+	
+							tabsList.forEach(checkedEl => {
+								if (checkedEl.checked) {
+									checkedEls.push(checkedEl.dataset.selectTab)
+								}
+							})
+	
+							localStorage.setItem('tabs', JSON.stringify(checkedEls)) 
+							checkedEls = []
+	
+							renderTabs()
+						})
+						
 					})
 					
+				break;
+			case 'sort': 
+			const container = document.querySelector('.sort__list')
+			container.classList.toggle('sort__list--active')
+			const activeSorting = JSON.parse(localStorage.getItem('tabs'))
+
+				container.querySelectorAll('.sort__el').forEach(elem => {
+					activeSorting.forEach(i=> {
+					if (+elem.dataset.priorityTab === +i) {
+						elem.style.display = 'block'
+					} 
 				})
-				
+			})
 			break;
-		default:
+			case 'table__view':
+					el.target.lastElementChild.classList.toggle('view__list--active')
+					const selectTabs = document.querySelectorAll('[data-select-table-tab]');
+					selectTabs.forEach(inp=> {
+						
+					})
+				break;
+			case 'table__sort':
+				el.target.lastElementChild.classList.toggle('sort__list--active')
 			break;
-	}
+				default:
+				break;
+		}
+	})
 })
 
+const saveColSize = ()=> {
+	localStorage.setItem('colSize', JSON.stringify(document.getElementById('table').style.gridTemplateColumns))
+	const colSize = JSON.parse(localStorage.getItem('colSize'))
+}
+
+$saveBtnChange.addEventListener('click', ev=> {
+	saveColSize()
+	ev.target.style.display  = 'none'
+})
+
+const sortTabs = ()=> {
+	const tabs = document.querySelectorAll('[data-priority-tab]')
+	let clearTabs = []
+	tabs.forEach(el=> {
+		if (!el.classList.contains('gu-mirror')) {
+			if (el.style.display !== "none") {
+				clearTabs.push(el)
+			}
+		}
+	})
+	clearTabs = clearTabs.map(el => {
+		return el.dataset.priorityTab
+	})
+	localStorage.setItem('tabs', JSON.stringify(clearTabs)) 
+}
+
+
+const resizableTable = ()=> {
+const min = 40;
+// The max (fr) values for grid-template-columns
+const columnTypeToRatioMap = {
+  numeric: .5,
+  'text-short': 1.67,
+  'text-long': 3.33};
+
+
+const table = document.querySelector('table');
+
+                                          
+const columns = [];
+let headerBeingResized;
+
+// The next three functions are mouse event callbacks
+
+// Where the magic happens. I.e. when they're actually resizing
+const onMouseMove = e => requestAnimationFrame(() => {
+ 
+
+  // Calculate the desired width
+  let horizontalScrollOffset = document.documentElement.scrollLeft;
+  const width = horizontalScrollOffset + e.clientX - headerBeingResized.offsetLeft - 265;
+  // Update the column object with the new size value
+  const column = columns.find(({ header }) => header === headerBeingResized);
+  column.size = Math.max(min, width) + 'px'; // Enforce our minimum
+
+  // For the other headers which don't have a set width, fix it to their computed width
+  columns.forEach(column => {
+    if (column.size.startsWith('minmax')) {// isn't fixed yet (it would be a pixel value otherwise)
+      column.size = parseInt(column.header.clientWidth, 10) + 'px';
+    }
+  });
+
+  /* 
+        Update the column sizes
+        Reminder: grid-template-columns sets the width for all columns in one value
+      */
+  table.style.gridTemplateColumns = columns.
+  map(({ header, size }) => size).
+  join(' ');
+});
+
+// Clean up event listeners, classes, etc.
+const onMouseUp = () => {
+ 
+
+  window.removeEventListener('mousemove', onMouseMove);
+  window.removeEventListener('mouseup', onMouseUp);
+  headerBeingResized.classList.remove('header--being-resized');
+  headerBeingResized = null;
+	
+	
+  $saveBtnChange.style.display = 'block'
+
+};
+
+// Get ready, they're about to resize
+const initResize = ({ target }) => {
+ 
+
+  headerBeingResized = target.parentNode;
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+  headerBeingResized.classList.add('header--being-resized');
+};
+
+// Let's populate that columns array and add listeners to the resize handles
+document.querySelectorAll('th').forEach(header => {
+  const max = columnTypeToRatioMap[header.dataset.type] + 'fr';
+  columns.push({
+    header,
+    // The initial size value for grid-template-columns:
+    size: `minmax(${min}px, ${max})` });
+
+  header.querySelector('.resize-handle').addEventListener('mousedown', initResize);
+});
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
+	
 	sortDragableItems()
 	renderTable()
 	changeInputs()
+	renderTabs()
+	resizableTable()
+	renderCols()
 	// Перемещение строк в талице
 	dragula([document.getElementById('table__body')], {
         
@@ -538,209 +739,231 @@ document.addEventListener('DOMContentLoaded', function () {
 			localStorage.setItem('setMenuItems', JSON.stringify(menuIds))
 
     })
-	const table = document.getElementById('table');
 
-	let draggingEle;
-	let draggingColumnIndex;
-	let placeholder;
-	let list;
-	let isDraggingStarted = false;
+	// Перемещение строк в верхнем меню
+	dragula([document.querySelector('.sort__list')], {
+        
+        moves: function (el, source, handle, sibling) {
+            if (handle.classList.contains('sort__el') ) {
+            return true
+            } else {
+            return false
+            }
+        }
+		
+	})
+	.on('drop', function () {
+		sortTabs()
+		renderTabs()
 
-	// The current position of mouse relative to the dragging element
-	let x = 0;
-	let y = 0;
+	})
+	const dragTableCol = () =>  {
+		const table = document.getElementById('table');
 
-	// Swap two nodes
-	const swap = function (nodeA, nodeB) {
-		const parentA = nodeA.parentNode;
-		const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
+		let draggingEle;
+		let draggingColumnIndex;
+		let placeholder;
+		let list;
+		let isDraggingStarted = false;
 
-		// Move `nodeA` to before the `nodeB`
-		nodeB.parentNode.insertBefore(nodeA, nodeB);
+		// The current position of mouse relative to the dragging element
+		let x = 0;
+		let y = 0;
 
-		// Move `nodeB` to before the sibling of `nodeA`
-		parentA.insertBefore(nodeB, siblingA);
-	};
+		// Swap two nodes
+		const swap = function (nodeA, nodeB) {
+			const parentA = nodeA.parentNode;
+			const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
 
-	// Check if `nodeA` is on the left of `nodeB`
-	const isOnLeft = function (nodeA, nodeB) {
-		// Get the bounding rectangle of nodes
-		const rectA = nodeA.getBoundingClientRect();
-		const rectB = nodeB.getBoundingClientRect();
+			// Move `nodeA` to before the `nodeB`
+			nodeB.parentNode.insertBefore(nodeA, nodeB);
 
-		return rectA.left + rectA.width / 2 < rectB.left + rectB.width / 2;
-	};
+			// Move `nodeB` to before the sibling of `nodeA`
+			parentA.insertBefore(nodeB, siblingA);
+		};
 
-	const cloneTable = function () {
-		const rect = table.getBoundingClientRect();
+		// Check if `nodeA` is on the left of `nodeB`
+		const isOnLeft = function (nodeA, nodeB) {
+			// Get the bounding rectangle of nodes
+			const rectA = nodeA.getBoundingClientRect();
+			const rectB = nodeB.getBoundingClientRect();
 
-		list = document.createElement('div');
-		list.classList.add('clone-list');
-		list.style.position = 'absolute';
-		list.style.left = `0px`;
-		list.style.top = `0px`;
-		table.parentNode.insertBefore(list, table);
+			return rectA.left + rectA.width / 2 < rectB.left + rectB.width / 2;
+		};
 
-		// Hide the original table
-		table.style.visibility = 'hidden';
+		const cloneTable = function () {
+			const rect = table.getBoundingClientRect();
+			list = document.createElement('div');
+			list.classList.add('clone-list');
+			list.style.position = 'absolute';
+			list.style.left = `0px`;
+			list.style.top = `40px`;
+			table.parentNode.insertBefore(list, table);
 
-		// Get all cells
-		const originalCells = [].slice.call(table.querySelectorAll('tbody td'));
+			// Hide the original table
+			table.style.visibility = 'hidden';
 
-		const originalHeaderCells = [].slice.call(table.querySelectorAll('th'));
-		const numColumns = originalHeaderCells.length;
+			// Get all cells
+			const originalCells = [].slice.call(table.querySelectorAll('tbody td'));
 
-		// Loop through the header cells
-		originalHeaderCells.forEach(function (headerCell, headerIndex) {
-			const width = parseInt(window.getComputedStyle(headerCell).width);
+			const originalHeaderCells = [].slice.call(table.querySelectorAll('th'));
+			const numColumns = originalHeaderCells.length;
 
-			// Create a new table from given row
-			const item = document.createElement('div');
-			item.classList.add('draggable');
+			// Loop through the header cells
+			originalHeaderCells.forEach(function (headerCell, headerIndex) {
+				const width = parseInt(window.getComputedStyle(headerCell).width);
 
-			const newTable = document.createElement('table');
-			newTable.setAttribute('class', 'clone-table');
-			newTable.style.width = `${width}px`;
-			
-			// Header
-			const th = headerCell.cloneNode(true);
-			let newRow = document.createElement('tr');
-			newRow.appendChild(th);
-			newTable.appendChild(newRow);
+				// Create a new table from given row
+				const item = document.createElement('div');
+				item.classList.add('draggable');
 
-			const cells = originalCells.filter(function (c, idx) {
-				return (idx - headerIndex) % numColumns === 0;
-			});
-			cells.forEach(function (cell) {
-				const newCell = cell.cloneNode(true);
-				newCell.style.width = `${width}px`;
-				newRow = document.createElement('tr');
-				newRow.appendChild(newCell);
+				const newTable = document.createElement('table');
+				newTable.setAttribute('class', 'clone-table');
+				newTable.style.width = `${width}px`;
+				
+				// Header
+				const th = headerCell.cloneNode(true);
+				let newRow = document.createElement('tr');
+				newRow.appendChild(th);
 				newTable.appendChild(newRow);
+
+				const cells = originalCells.filter(function (c, idx) {
+					return (idx - headerIndex) % numColumns === 0;
+				});
+				cells.forEach(function (cell) {
+					const newCell = cell.cloneNode(true);
+					newCell.style.width = `${width}px`;
+					newRow = document.createElement('tr');
+					newRow.appendChild(newCell);
+					newTable.appendChild(newRow);
+				});
+
+				item.appendChild(newTable);
+				list.appendChild(item);
 			});
-
-			item.appendChild(newTable);
-			list.appendChild(item);
-
-		});
-	};
-
-	const mouseDownHandler = function (e) {
-		draggingColumnIndex = [].slice.call(table.querySelectorAll('th')).indexOf(e.target);
-
-		// Determine the mouse position
-		x = e.clientX - e.target.offsetLeft;
-		y = e.clientY - e.target.offsetTop;
-
-		// Attach the listeners to `document`
-		document.addEventListener('mousemove', mouseMoveHandler);
-		document.addEventListener('mouseup', mouseUpHandler);
-	};
-
-	const mouseMoveHandler = function (e) {
-		if (!isDraggingStarted) {
-			isDraggingStarted = true;
-
-			cloneTable();
-
-			draggingEle = [].slice.call(list.children)[draggingColumnIndex];
-			draggingEle.classList.add('dragging');
-
-			// Let the placeholder take the height of dragging element
-			// So the next element won't move to the left or right
-			// to fill the dragging element space
-			placeholder = document.createElement('div');
-			placeholder.classList.add('placeholder');
-			draggingEle.parentNode.insertBefore(placeholder, draggingEle.nextSibling);
-			placeholder.style.width = `${draggingEle.offsetWidth}px`;
-		}
-
-		// Set position for dragging element
-		draggingEle.style.position = 'absolute';
-		draggingEle.style.top = `${draggingEle.offsetTop + e.clientY - y}px`;
-		draggingEle.style.left = `${draggingEle.offsetLeft + e.clientX - x}px`;
-
-		// Reassign the position of mouse
-		x = e.clientX;
-		y = e.clientY;
-
-		// The current order
-		// prevEle
-		// draggingEle
-		// placeholder
-		// nextEle
-		const prevEle = draggingEle.previousElementSibling;
-		const nextEle = placeholder.nextElementSibling;
-
-		if (prevEle && isOnLeft(draggingEle, prevEle)) {
-			// The current order    -> The new order
-			// prevEle              -> placeholder
-			// draggingEle          -> draggingEle
-			// placeholder          -> prevEle
-			swap(placeholder, draggingEle);
-			swap(placeholder, prevEle);
-			return;
-		}
-
-		// The dragging element is below the next element
-		// User moves the dragging element to the bottom
-		if (nextEle && isOnLeft(nextEle, draggingEle)) {
-			// The current order    -> The new order
-			// draggingEle          -> nextEle
-			// placeholder          -> placeholder
-			// nextEle              -> draggingEle
-			swap(nextEle, placeholder);
-			swap(nextEle, draggingEle);
-		}
-	};
-
-	const mouseUpHandler = function () {
-			// // Remove the placeholder
-			// placeholder && placeholder.parentNode.removeChild(placeholder);
-			// draggingEle.classList.remove('dragging');
-			// draggingEle.style.removeProperty('top');
-			// draggingEle.style.removeProperty('left');
-			// draggingEle.style.removeProperty('position');
-			// Get the end index
-			const endColumnIndex = [].slice.call(list.children).indexOf(draggingEle);
-			
-			isDraggingStarted = false;
-
-			// Remove the `list` element
-			list.parentNode.removeChild(list);
-
-			// Move the dragged column to `endColumnIndex`
-			table.querySelectorAll('tr').forEach(function (row) {
-				const cells = [].slice.call(row.querySelectorAll('th, td'));
-				draggingColumnIndex > endColumnIndex
-					? cells[endColumnIndex].parentNode.insertBefore(
-						cells[draggingColumnIndex],
-						cells[endColumnIndex]
-					)
-					: cells[endColumnIndex].parentNode.insertBefore(
-						cells[draggingColumnIndex],
-						cells[endColumnIndex].nextSibling
-					);
-			});
-
-			// Bring back the table
-			table.style.removeProperty('visibility');
-
-			// Remove the handlers of `mousemove` and `mouseup`
-			document.removeEventListener('mousemove', mouseMoveHandler);
-			document.removeEventListener('mouseup', mouseUpHandler);
-			let currentCols=[];
-			document.querySelectorAll('.thead').forEach(el => {
-				currentCols.push(+el.dataset.tableCol)
-			})
-				localStorage.setItem('currentCol', JSON.stringify(currentCols))
-
-		};	
-
 	
+		};
 
-	table.querySelectorAll('th').forEach(function (headerCell) {
-		headerCell.classList.add('draggable');
-		headerCell.addEventListener('mousedown', mouseDownHandler);
-	});
+		const mouseDownHandler = function (e) {
+			draggingColumnIndex = [].slice.call(table.querySelectorAll('th')).indexOf(e.target);
+			
+			// Determine the mouse position
+			x = e.clientX - e.target.offsetLeft;
+			y = e.clientY - e.target.offsetTop;
+
+			// Attach the listeners to `document`
+			document.addEventListener('mousemove', mouseMoveHandler);
+			document.addEventListener('mouseup', mouseUpHandler);
+
+		};
+
+		const mouseMoveHandler = function (e) {
+			if (!isDraggingStarted) {
+				isDraggingStarted = true;
+
+				cloneTable();
+debugger
+				draggingEle = [].slice.call(list.children)[draggingColumnIndex];
+
+				draggingEle.classList.add('dragging');
+
+				// Let the placeholder take the height of dragging element
+				// So the next element won't move to the left or right
+				// to fill the dragging element space
+				placeholder = document.createElement('div');
+				placeholder.classList.add('placeholder');
+				draggingEle.parentNode.insertBefore(placeholder, draggingEle.nextSibling);
+				placeholder.style.width = `${draggingEle.offsetWidth}px`;
+			}
+
+			// Set position for dragging element
+			draggingEle.style.position = 'absolute';
+			draggingEle.style.top = `${draggingEle.offsetTop + e.clientY - y}px`;
+			draggingEle.style.left = `${draggingEle.offsetLeft + e.clientX - x}px`;
+
+			// Reassign the position of mouse
+			x = e.clientX;
+			y = e.clientY;
+
+			// The current order
+			// prevEle
+			// draggingEle
+			// placeholder
+			// nextEle
+			const prevEle = draggingEle.previousElementSibling;
+			const nextEle = placeholder.nextElementSibling;
+
+			if (prevEle && isOnLeft(draggingEle, prevEle)) {
+				// The current order    -> The new order
+				// prevEle              -> placeholder
+				// draggingEle          -> draggingEle
+				// placeholder          -> prevEle
+				swap(placeholder, draggingEle);
+				swap(placeholder, prevEle);
+				return;
+			}
+
+			// The dragging element is below the next element
+			// User moves the dragging element to the bottom
+			if (nextEle && isOnLeft(nextEle, draggingEle)) {
+				// The current order    -> The new order
+				// draggingEle          -> nextEle
+				// placeholder          -> placeholder
+				// nextEle              -> draggingEle
+				swap(nextEle, placeholder);
+				swap(nextEle, draggingEle);
+			}
+		};
+
+		const mouseUpHandler = function () {
+				// // Remove the placeholder
+				// placeholder && placeholder.parentNode.removeChild(placeholder);
+				// draggingEle.classList.remove('dragging');
+				// draggingEle.style.removeProperty('top');
+				// draggingEle.style.removeProperty('left');
+				// draggingEle.style.removeProperty('position');
+				// Get the end index
+				const endColumnIndex = [].slice.call(list.children).indexOf(draggingEle);
+				
+				isDraggingStarted = false;
+
+				// Remove the `list` element
+				list.parentNode.removeChild(list);
+
+				// Move the dragged column to `endColumnIndex`
+				table.querySelectorAll('tr').forEach(function (row) {
+					const cells = [].slice.call(row.querySelectorAll('th, td'));
+					draggingColumnIndex > endColumnIndex
+						? cells[endColumnIndex].parentNode.insertBefore(
+							cells[draggingColumnIndex],
+							cells[endColumnIndex]
+						)
+						: cells[endColumnIndex].parentNode.insertBefore(
+							cells[draggingColumnIndex],
+							cells[endColumnIndex].nextSibling
+						);
+				});
+
+				// Bring back the table
+				table.style.removeProperty('visibility');
+
+				// Remove the handlers of `mousemove` and `mouseup`
+				document.removeEventListener('mousemove', mouseMoveHandler);
+				document.removeEventListener('mouseup', mouseUpHandler);
+				let currentCols=[];
+				document.querySelectorAll('.thead').forEach(el => {
+					currentCols.push(+el.dataset.tableCol)
+				})
+					localStorage.setItem('currentCol', JSON.stringify(currentCols))
+				
+			};	
+
+		
+
+		table.querySelectorAll('th').forEach(function (headerCell) {
+			headerCell.classList.add('draggable');
+			headerCell.addEventListener('mousedown', mouseDownHandler);
+		});
+	}
+	dragTableCol()
 });

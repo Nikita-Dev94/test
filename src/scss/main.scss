@@ -30,9 +30,9 @@ main {
             display: flex;
 
             .main__nav-item {
-                
-                &.main__nav-item--nonactive {
-                    display: none;
+                display: none;
+                &.main__nav-item--active {
+                    display: inline-block;
                 }
                 &:not(:last-of-type) {
                     margin-right: 15px;
@@ -53,6 +53,7 @@ main {
     box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.07);
     border-radius: 10px;
     border: solid 1px $PaleGreyTwo;
+
 }
 .main__add {
     padding: 20px 25px;
@@ -70,13 +71,21 @@ main {
         }
     }
 }
+
 .table {
     width: 100%;
-    padding-bottom: 195px;
     border-spacing: 0px;
+    min-height: 100%;
     tbody td {
         padding: 5px 10px;
+        text-align: left;
+        vertical-align:middle;
     }
+
+}
+.table__scroll {
+    width: 100%;
+    height: 100%;
 }
 .thead {
     position: relative;
@@ -119,6 +128,31 @@ main {
 .table__wrapper {
     position: relative;
     padding-bottom: 195px;
+    padding-top: 40px;
+    input {
+        width: 100%;
+        overflow: hidden;
+    }
+}
+.table__change {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 15px;
+    align-items: center;
+    width: 100%;
+    .save__change-btn {
+        margin-right: 20px;
+        font-size: 12px;
+        color: $LightGreyBlue;
+        display: none;
+    }
+    .btn__setting {
+        padding-top: 4px;
+        position: relative;
+    }
 }
 .table__total {
     position: absolute;
@@ -174,12 +208,12 @@ main {
 
     .products__list {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 10px);
         left: 0;
-        visibility: hidden;
-        opacity: 0;
         z-index: 5;
-        transition: visibility .2s ease, opacity .2s ease .2s;
+        width: 100%;
+        @include ElementHide;
+
         &.cell__wrapper {
             padding: 0;
             li {
@@ -188,8 +222,7 @@ main {
         }
 
         &.products__list--active {
-            visibility: visible;
-            opacity: 1;
+            @include ElementVisible;
         }
     }
 }
@@ -220,26 +253,24 @@ main {
 }
 
 .setting__list {
-    position: absolute;
-    top: 100%;
-    right: 15px;
-    visibility: hidden;
-    opacity: 0;
+        position: absolute;
+        top: 100%;
+        right: 15px;
+        z-index: 10;
+        @include ElementHide;
     &.cell__wrapper {
         padding-right: 15px;
     }
     &.setting__list--active {
-        visibility: visible;
-        opacity: 1;
+        @include ElementVisible;
     }
     .setting__item {
-    cursor: pointer;
+        cursor: pointer;
     }
+
 }
 
-input {
-    width: 100%;
-}
+
 
 .hide {
     display: none;
@@ -251,15 +282,12 @@ input {
         position: absolute;
         bottom: 0;
         left: 10px;
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility .2s ease, opacity .2s ease .2s;
+        @include ElementHide;
         &.cell__wrapper {
             padding-right: 15px;
         }
         &.delete--active {
-            visibility: visible;
-            opacity: 1;
+            @include ElementVisible;
         }
     }
 }
@@ -269,6 +297,39 @@ input {
         display: block;
     }
 }
+.sort__list {
+    display: none;
+    &.sort__list--active {
+        display: block;
+    }
+    .sort__el {
+        display: none;
+        &:hover {
+            cursor: grab;
+            .sort__btn-drag {
+                opacity: 1;
+            }
+        }
+    }
+    .sort__btn-drag {
+        min-width: 11px;
+        height: 12px;
+        margin-right: 5px;
+        position: relative;
+        opacity: 0;
+        transition: opacity .2s ease;
+        &:hover {
+            cursor: grab;
+        }
+        &::before {
+            content: url(../img/svg/btnDrag.svg);
+            width: 100%;
+            height: 100%;
+        }
+        
+    }
+}
+
 .view__el {
     display: flex;
     width: 100%;
@@ -289,3 +350,64 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none; // Yeah, yeah everybody write about it
 }
+
+
+
+
+
+
+table {
+    position: relative;
+    width: 100%;
+    -webkit-box-flex: 1;
+            flex: 1;
+    display: grid;
+    border-collapse: collapse;
+    grid-template-columns: repeat(7, minmax(40px, 1fr));
+      grid-auto-rows: 45px;
+  }
+   
+  thead,
+  tbody,
+  tr {
+    display: contents;
+  }
+   th {
+    overflow: hidden;
+   }
+  th,
+  td {
+    
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+   
+  th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    position: relative;
+  }
+   
+
+   
+  .resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0;
+    width: 3px;
+    cursor: col-resize;
+  }
+   
+  .resize-handle:hover,
+  .header--being-resized .resize-handle {
+    opacity: 0.5;
+  }
+   
+  th:hover .resize-handle {
+    opacity: 0.3;
+  }
+   

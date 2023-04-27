@@ -16,6 +16,14 @@ $WarmGrey: #8f8f8f;
 $LightGreyBlue: #a6b7d4;
 
 
-
+@mixin ElementHide {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility .2s ease, opacity .2s ease .2s;
+}
+@mixin ElementVisible {
+    visibility: visible;
+    opacity: 1;
+}
 
 

@@ -30,7 +30,8 @@
 
 
 
-.table {
+.table,
+.sort__list {
 	
 	.gu-mirror {
 		position: fixed !important;
@@ -97,6 +98,7 @@
 
 .table {
 	border-collapse: collapse;
+	height: 100%;
 }
 
 .draggable {
@@ -129,6 +131,8 @@
 	display: flex;
 }
 .clone-table {
+	display: flex;
+    flex-direction: column;
 	border-collapse: collapse;
 	border: none;
 }

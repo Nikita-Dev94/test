@@ -78,22 +78,17 @@
         }   
     }
     .subnav__list {
-        opacity: 0;
-        visibility: hidden;
-        max-height: 0;
-        transition: opacity .2s ease, visibility .2s ease, max-height .2s ease, background-color .2s ease ;
+            @include ElementHide;
+            max-height: 0;
+            transition:  opacity .2s ease, visibility .2s ease, max-height .2s ease, background-color .2s ease ;
         &.active {
-            opacity: 1;
-            visibility: visible;
+            @include ElementVisible;
             max-height: 100%;
             background-color: $SubMenuBack;
         }
         .subnav__item {
             padding: 7px 0 7px 25px;
             color: $SubMenuText;
-                .subnav__item-link {
-                
-            } 
         }
     }
     
@@ -138,15 +133,13 @@
     }
     .footer__drop {
         position: absolute;
-        top: -100%;
+        top: calc(-100% - 10px);
         width: 100%;
-        opacity: 0;
-        visibility: hidden;
         max-height: 0;
+        @include ElementHide;
         transition: opacity .2s ease, visibility .2s ease, max-height .2s ease, transform .2s ease;
         &.drop-top {
-            opacity: 1;
-            visibility: visible;
+            @include ElementVisible;
             max-height: 100%;
             transform: translateY(-10.5px);
         }
@@ -157,9 +150,7 @@
             border-radius: 5px;
             .footer__item {
                 padding: 7px 0;
-                .footer__link {
 
-                }
             }
         }
     }
