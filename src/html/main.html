@@ -1,5 +1,13 @@
 <section class="main">
-    <h1 class="main__title">Проведение ТО и мелкий ремонт</h1>
+    <div class="title__btn">
+        <button class="menu__open" id="menuOpen">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <h1 class="main__title">Проведение ТО и мелкий ремонт</h1>
+    </div>
+
     <nav class="main__nav">
         <ul class="main__nav-list">
             <li class="main__nav-item" data-tab="1">
@@ -81,73 +89,15 @@
                     </svg>
             </button>
             <ul class="setting__list cell__wrapper">
-                <li class="setting__item" id="table__view">Отображение столбцов
-                    <ul class="view__list ">
-                        <li class="view__el">
-                            <input data-select-table-tab="1" type="checkbox" name="num"/>
-                            <label for="num">Номер строки</label>
-                        </li>
-                        <li class="view__el">
-                            <input data-select-table-tab="2" type="checkbox" name="action"/>
-                            <label for="action">Действие</label>
-                        </li>
-                        <li class="view__el">
-                            <input data-select-table-tab="3" type="checkbox" name="name"/>
-                            <label for="name">Наименование единицы</label>
-                        </li>
-                        <li class="view__el">
-                            <input data-select-table-tab="4" type="checkbox" name="price"/>
-                            <label for="price">Цена</label>
-                        </li>
-                        <li class="view__el">
-                            <input data-select-table-tab="5" type="checkbox" name="quantity"/>
-                            <label for="quantity">Кол-во</label>
-                        </li>
-                        <li class="view__el">
-                            <input data-select-table-tab="6" type="checkbox" name="title"/>
-                            <label for="title">Название товара</label>
-                        </li>
-                        <li class="view__el">
-                            <input data-select-table-tab="7" type="checkbox" name="total"/>
-                            <label for="total">Итого</label>
-                        </li>
-                    </ul>
-                </li>
                 <li class="setting__item" id="table__sort">Порядок столбцов
                     <ul class="sort__list ">
-                        <li class="sort__el" data-priority-table-tab="1">
-                            <button class="sort__btn-drag"></button>
-                            Номер строки
-                        </li>
-                        <li class="sort__el" data-priority-table-tab="2">
-                            <button class="sort__btn-drag"></button>
-                            Действие
-                        </li>
-                        <li class="sort__el" data-priority-table-tab="3">
-                            <button class="sort__btn-drag"></button>
-                            Наименование единицы
-                        </li>
-                        <li class="sort__el" data-priority-table-tab="3">
-                            <button class="sort__btn-drag"></button>
-                            Цена
-                        </li>
-                        <li class="sort__el" data-priority-table-tab="3">
-                            <button class="sort__btn-drag"></button>
-                           Кол-во
-                        </li>
-                        <li class="sort__el" data-priority-table-tab="3">
-                            <button class="sort__btn-drag"></button>
-                            Название товара
-                        </li>
-                        <li class="sort__el" data-priority-table-tab="3">
-                            <button class="sort__btn-drag"></button>
-                            Итого
-                        </li>
+                       
+            
                     </ul>
                 </li>
             </ul>
         </div>
-        <div class="table__scroll">
+
             <table class="table data" id="table" >
                 <thead id="thead">
                     <tr class="table__head" id="table__head">
@@ -164,8 +114,8 @@
     
                 </tbody>
             </table>
-        </div>
-      
+
+      <div class="table__clone"></div>
         <div class="table__total">
             <div class="total__detail">
                 <div class="total__local">

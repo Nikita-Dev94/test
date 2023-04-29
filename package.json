@@ -49,6 +49,7 @@
     "webpack-stream": "^7.0.0"
   },
   "dependencies": {
-    "@validide/resizable-table-columns": "^2.1.0"
+    "@validide/resizable-table-columns": "^2.1.0",
+    "dry-test": "^0.1.9"
   }
 }

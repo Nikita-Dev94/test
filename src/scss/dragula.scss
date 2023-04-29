@@ -30,7 +30,7 @@
 
 
 
-.table,
+.table__clone,
 .sort__list {
 	
 	.gu-mirror {
@@ -60,7 +60,7 @@
 	}
 	.gu-transit {
 		opacity: 1;
-		
+		background-color: transparent;
 		transition: transform   .2s ease;
 		transform: scaleY(1.05);
 		position: relative;
@@ -98,7 +98,6 @@
 
 .table {
 	border-collapse: collapse;
-	height: 100%;
 }
 
 .draggable {
@@ -131,10 +130,13 @@
 	display: flex;
 }
 .clone-table {
-	display: flex;
-    flex-direction: column;
 	border-collapse: collapse;
 	border: none;
+	display: flex;
+    flex-direction: column;
+	td {
+		margin-bottom: 5px;
+	}
 }
 tr {
 	min-height: 45px;
